@@ -1,5 +1,7 @@
 # PLUOpS: Programming Languages Unambiguous Operator Specifiction
 
+Version: 1.0 (2026-08-23)
+
 ## Value Types
 
 The following generic type descriptions are used here:
@@ -52,7 +54,7 @@ Form: `operand1 operator_symbol operand2`
 | `div` | `int`, `uint` | **Truncating integer division**: `a div b`<br>This operator does always truncating integer division.<br>`uint` result when `uint div uint`<br>`int` result when `int div uint` or `uint div int`.
 | `mod` | `int`, `uint` | **Integer division remainder**: `a mod b`<br>`uint` result when `uint div uint`<br>`int` result when `int div uint` or `uint div int`.
 | `&` | `int`, `uint` | **Bitwise AND**: `a & b`<br>Keeps integer signed-ness. <br>For script languages the floating point operands sould be converted to integers first with the Round() function (to handle 0.999 as 1)
-| `\|` | `int`, `uint` | **Bitwise OR**: `a \| b`<br>Keeps integer signed-ness. Invalid operation on floating point numbers.<br>For script languages the floating point operands sould be converted to integers first with the Round() function
+| <code>&#124;</code> | `int`, `uint` | **Bitwise OR**: <code>a &#124; b</code><br>Keeps integer signed-ness. Invalid operation on floating point numbers.<br>For script languages the floating point operands sould be converted to integers first with the Round() function
 | `<<` | `int`, `uint` | **Bitwise Shift Left**: `a << b`<br>Keeps integer signed-ness of `a`. Invalid operation on floating point numbers.<br>For script languages the floating point operands sould be converted to integers first with the Round() function
 | `>>` | `int`, `uint` | **Bitwise Shift Right**: `a >> b`<br>Keeps integer signed-ness of `a`. Invalid operation on floating point numbers.<br>For script languages the floating point operands sould be converted to integers first with the Round() function
 | `and` | `bool` | **Logical AND**: `a and b`<br>result is `bool`
@@ -84,7 +86,7 @@ Precedence is listed from highest to lowest.
 | 3 | `%expr`, `-expr`, `~expr` | Address-of, unary minus, bitwise NOT |
 | 4 | `<<`, `>>` | Bit shifts |
 | 5 | `&` | Bitwise AND |
-| 6 | `\|`, `xor` | Bitwise OR, bitwise XOR |
+| 6 | <code>&#124;</code>, `xor` | Bitwise OR, bitwise XOR |
 | 7 | `/`, `div`, `mod` | Floating point division, integer division, integer remainder |
 | 8 | `*` | Multiplication |
 | 9 | `+`, `-` | Addition, subtraction |
@@ -113,5 +115,9 @@ Precedence is listed from highest to lowest.
 | `!` | - |
 
 
+## Document changes
 
 
+| Version | Date (iso) | Changes |
+| --- | --- | --- |
+| 1.0 | 2026-08-23 | Initial version
