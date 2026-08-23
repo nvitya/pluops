@@ -1,5 +1,7 @@
 # PLUOpS: Programming Languages Unambiguous Operator Specification
 
+Publicly available, open specification for designing progamming languages.
+
 Version: 1.0 (2026-08-23)
 Specification page: [https://nvitya.github.io/pluops/](https://nvitya.github.io/pluops/)
 
