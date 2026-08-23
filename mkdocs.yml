@@ -1,0 +1,26 @@
+site_name: PLUOpS
+site_description: Programming Languages Unambiguous Operator Specifiction
+repo_url: https://github.com/nvitya/pluops
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - content.code.copy
+    - search.highlight
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Home: index.md
+
+validation:
+  nav:
+    omitted_files: warn
+    not_found: warn
+  links:
+    not_found: warn
+    unrecognized_links: warn
+    anchors: warn
