@@ -14,7 +14,7 @@ The following generic type descriptions are used here:
 
 ### Generic Type Rules for `int` and `float` types
 
-The unary operators (the operators with single argument, like negation) usually keep their original types. The operator with two operands usually use the following rules:
+The unary operators (the operators with single argument, like negation) usually keep their original types. The operators with two operands usually use the following rules:
 
 | Operand 1 | Operand 2 | Result    |
 | --------- | --------- | --------- |
@@ -64,21 +64,14 @@ Form: `operand1 operator_symbol operand2`
 | `<=` | `int`, `uint`, `float` | **Numerical comparison less-than or equal**: `a <= b`<br>`uint` comparison when `uint <= uint`<br>`int` comparison when `int <= uint` or `uint <= int`.<br> `float` comparison when any of the operands is `float`.<br> The result is always `bool`
 | `>` | `int`, `uint`, `float` | **Numerical comparison greater-than**: `a > b`<br>`uint` comparison when `uint > uint`<br>`int` comparison when `int > uint` or `uint < int`.<br> `float` comparison when any of the operands is `float`.<br> The result is always `bool`
 | `>=` | `int`, `uint`, `float` | **Numerical comparison greater-than or equal**: `a >= b`<br>`uint` comparison when `uint >= uint`<br>`int` comparison when `int >= uint` or `uint >= int`.<br> `float` comparison when any of the operands is `float`.<br> The result is always `bool`
+| `.` | structured types | **Structured type member access**: `a.member_name`
+| `is` | any expression + Type | **Type test**: `a is T`<br>Result is `bool`: true if the type of the `a` is `T` or `a` is descendant of the type `T`
+| `as` | any expression + Type | **Type casting**: `a as T`<br>The result is `a` converted to type `T`.<br>**Might be invalid.**<br>Some languages might provide alternative forms like `T(a)`
+| `[`+`]`<br>(postfix)| `a`: array or `ptr`<br>`b`: `int`, `uint` | **Pointer or array indexing**: `a[b]`<br>**On arrays:** array element in the array `a` at the index position `b` shourl be returned.<br>**On pointers:** when `a = ^T`, the result type is also `^T`,<br> pointing to the address `a + b * SizeOf(T)` (no de-referencing like in C)
 
+## Parentheses
 
-
-## Symbols Left Free
-
-| Symbol | Possible Uses |
-| --- | --- |
-| `!` | - |
-| `?` | DQ: inference marker |
-| `#` | DO: preprocessor directive |
-| `$` | DQ: context-dependant symbols |
-| `` ` `` | Recommend to reserve for infix operators, like `` `cxdiv` ``
-
-
-
+The `(` + `)` are used for grouping expressions, like in mathematics.
 
 ## Operator Precedence
 
@@ -86,16 +79,39 @@ Precedence is listed from highest to lowest.
 
 | Level | Operators and syntax | Meaning |
 | --- | --- | --- |
-| 1 | literals, identifiers, `@namespace.name`, `(...)`, `[...]`, `Type(expr)`, `new`, builtins such as `Len(...)`, `SizeOf(...)`, `iif(...)` | Primary expressions, array literals, casts, allocation, builtin forms |
-| 2 | `expr(args...)`, `expr.member`, `expr[index]`, `expr[start:end]`, `ptr[index]`, `ptr^` | Calls, member access, indexing, slicing, pointer indexing, pointer dereference |
+| 1 | literals, identifiers, `(...)`, `[...]`, `T(expr)`, `new T` | Primary expressions, array literals, casts, allocation |
+| 2 | `expr(args...)`, `expr.member`, `expr[index]`, `expr[start:end]`, `ptr[index]`, `ptr^` | Function calls, member access, indexing, slicing, pointer indexing, pointer dereference |
 | 3 | `%expr`, `-expr`, `~expr` | Address-of, unary minus, bitwise NOT |
 | 4 | `<<`, `>>` | Bit shifts |
 | 5 | `&` | Bitwise AND |
 | 6 | `\|`, `xor` | Bitwise OR, bitwise XOR |
-| 7 | `/`, `div`, `mod` | Division, integer division, integer modulo |
+| 7 | `/`, `div`, `mod` | Floating point division, integer division, integer remainder |
 | 8 | `*` | Multiplication |
 | 9 | `+`, `-` | Addition, subtraction |
-| 10 | `==`, `<>`, `<`, `<=`, `>`, `>=`, `is`, `as` | Comparison, object type test, and explicit cast |
+| 10 | `==`, `<>`, `<`, `<=`, `>`, `>=`, `is`, `as` | Comparison, type test, "as" cast |
 | 11 | `not` | Logical NOT |
 | 12 | `and` | Logical AND |
 | 13 | `or` | Logical OR |
+
+
+## Symbols Left Free
+
+| Symbol | Possible Uses |
+| --- | --- |
+| `{`, `}` | block delimiters
+| `'` | String delimiter
+| `"` | String delimiter
+| `:` | Block start, type designation marker, member name designation marker
+| `;` | list separator
+| `;` | Statement termination
+| `\` | Escape symbol in strings, line continuation
+| `?` | DQ: inference marker
+| `#` | DO: preprocessor directive
+| `$` | DQ: context-dependant symbols
+| `@` | DQ: namespace designator
+| `` ` `` | Recommend to reserve for infix operators, like `` `cxdiv` ``
+| `!` | - |
+
+
+
+
