@@ -1,8 +1,7 @@
 # PLUOpS: Programming Languages Unambiguous Operator Specification
 
 Version: 1.0 (2026-08-23)
-
-Authors: Viktor Guáth-Nagy
+Specification page: [https://nvitya.github.io/pluops/](https://nvitya.github.io/pluops/)
 
 ## Value Types
 
@@ -125,9 +124,9 @@ Precedence is listed from highest to lowest.
 
 ## Document Changes
 
-| Version | Date (ISO) | Changes |
-| --- | --- | --- |
-| 1.0 | 2026-08-23 | Initial version
+| Version | Date (ISO) | Persons | Changes |
+| --- | --- | --- | --- |
+| 1.0 | 2026-08-23 | Viktor Guáth-Nagy | Initial version
 
 
 ## Contributing
