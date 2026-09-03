@@ -2,7 +2,7 @@
 
 Publicly available, open specification for designing progamming languages.
 
-Version: 1.0 (2026-08-23)
+Version: 1.1 (2026-09-03)
 Specification page: [https://nvitya.github.io/pluops/](https://nvitya.github.io/pluops/)
 
 ## Value Types
@@ -40,7 +40,7 @@ Form: `operator_symbol operand` or `operand operator_symbol`
 | `-` | `int`, `uint`, `float` | **Numerical negation**: `- a`<br>Either floating-point negation or integer negation.<br>Unsigned integers are converted to signed integers: `uint -> int`.
 | `not` | `bool` | **Logical NOT**: `not a`<br>The result is `bool`.
 | `~` | `int`, `uint` | **Bitwise NOT**: `~ a`<br>Preserves integer signedness.<br>For scripting languages, floating-point operands should first be converted to integers using the `Round()` function.
-| `%` | any addressable value | **Address-of**: `% a`<br>The operand must be a variable or an expression that can provide an unambiguous memory address.<br>The result is a typed `ptr`, such as `^int`, `^uint`, or `^float`.
+| `%`<br>(recommended) | any addressable value | **Address-of**: `% a`<br>The operand must be a variable or an expression that can provide an unambiguous memory address.<br>The result is a typed `ptr`, such as `^int`, `^uint`, or `^float`.<br>Do not use this symbol for integer remainder.
 | `^`<br>(prefix) | any **type** | **Pointer type designator**: `^T`<br>**Allowed only in type expressions.**<br>The result is a pointer **type** pointing to type `T`, such as `^int`, `^uint`, `^float`, or `^bool`.<br>Multiple levels are allowed, such as `^^int` or `^^^int`.
 | `^`<br>(postfix) | `ptr` | **Pointer dereference**: `a^`<br>The result has the type referenced by the typed pointer: `^int -> int`, `^uint -> uint`, `^float -> float`, etc.
 
@@ -55,16 +55,17 @@ Form: `operand1 operator_symbol operand2`
 | `*` | `int`, `uint`, `float` | **Numerical multiplication**: `a * b`<br>Either floating-point or integer multiplication according to the "Generic Type Rules".
 | `/` | `int`, `uint`, `float` | **Floating-point division**: `a / b`<br>This operator always performs floating-point division; the result is always a floating-point value.
 | `div` | `int`, `uint` | **Truncating integer division**: `a div b`<br>This operator always performs truncating integer division.<br>The result is `uint` for `uint div uint`.<br>The result is `int` for `int div uint` or `uint div int`.
-| `mod` | `int`, `uint` | **Integer division remainder**: `a mod b`<br>The result is `uint` for `uint mod uint`.<br>The result is `int` for `int mod uint` or `uint mod int`.
+| `rem` | `int`, `uint` | **Integer division remainder**: `a rem b`<br>Same as the `a % b` in the C programming language.<br> `r = a - (a div b) * b`, can be negative!<br> The result is `uint` for `uint rem uint`.<br>The result is `int` for `int rem uint` or `uint rem int`.
+| `mod` | `int`, `uint` | **Integer modulo**: `a mod b`<br>`r = a - (a div b) * b`<br>`if r < 0 then r = r + b`<br>Cannot be negative.<br>The result is `uint` for `uint mod uint`.<br>The result is `int` for `int mod uint` or `uint mod int`.
 | `&` | `int`, `uint` | **Bitwise AND**: `a & b`<br>Preserves integer signedness.<br>For scripting languages, floating-point operands should first be converted to integers using the `Round()` function (to handle 0.999 as 1).
 | <code>&#124;</code> | `int`, `uint` | **Bitwise OR**: <code>a &#124; b</code><br>Preserves integer signedness. This operation is invalid for floating-point numbers.<br>For scripting languages, floating-point operands should first be converted to integers using the `Round()` function.
 | `<<` | `int`, `uint` | **Bitwise shift left**: `a << b`<br>Preserves the signedness of `a`. This operation is invalid for floating-point numbers.<br>For scripting languages, floating-point operands should first be converted to integers using the `Round()` function.
 | `>>` | `int`, `uint` | **Bitwise shift right**: `a >> b`<br>Preserves the signedness of `a`. This operation is invalid for floating-point numbers.<br>For scripting languages, floating-point operands should first be converted to integers using the `Round()` function.
 | `and` | `bool` | **Logical AND**: `a and b`<br>The result is `bool`.
 | `or` | `bool` | **Logical OR**: `a or b`<br>The result is `bool`.
-| `==` | `int`, `uint`, `float` | **Numerical equality comparison**: `a == b`<br>An `int` comparison is used when each operand is either `int` or `uint`.<br>A `float` comparison is used when either operand is `float`.<br>The result is always `bool`.
-| `<>` | `int`, `uint`, `float` | **Numerical inequality comparison**: `a <> b` (preferred)<br>An `int` comparison is used when each operand is either `int` or `uint`.<br>A `float` comparison is used when either operand is `float`.<br>The result is always `bool`.
-| `!=` | `int`, `uint`, `float` | **Numerical inequality comparison**: `a != b` (alternative)<br>An `int` comparison is used when each operand is either `int` or `uint`.<br>A `float` comparison is used when either operand is `float`.<br>The result is always `bool`.
+| `==` | `int`, `uint`, `float`, `bool` | **Numerical equality comparison**: `a == b`<br>An `int` comparison is used when each operand is either `int` or `uint`.<br>A `float` comparison is used when either operand is `float`.<br>The result is always `bool`.
+| `<>` | `int`, `uint`, `float`, `bool` | **Numerical inequality comparison**: `a <> b` (preferred)<br>An `int` comparison is used when each operand is either `int` or `uint`.<br>A `float` comparison is used when either operand is `float`.<br>The result is always `bool`.
+| `!=` | `int`, `uint`, `float`, `bool` | **Numerical inequality comparison**: `a != b` (alternative)<br>An `int` comparison is used when each operand is either `int` or `uint`.<br>A `float` comparison is used when either operand is `float`.<br>The result is always `bool`.
 | `<` | `int`, `uint`, `float` | **Numerical less-than comparison**: `a < b`<br>A `uint` comparison is used for `uint < uint`.<br>An `int` comparison is used for `int < uint` or `uint < int`.<br>A `float` comparison is used when either operand is `float`.<br>The result is always `bool`.
 | `<=` | `int`, `uint`, `float` | **Numerical less-than-or-equal comparison**: `a <= b`<br>A `uint` comparison is used for `uint <= uint`.<br>An `int` comparison is used for `int <= uint` or `uint <= int`.<br>A `float` comparison is used when either operand is `float`.<br>The result is always `bool`.
 | `>` | `int`, `uint`, `float` | **Numerical greater-than comparison**: `a > b`<br>A `uint` comparison is used for `uint > uint`.<br>An `int` comparison is used for `int > uint` or `uint > int`.<br>A `float` comparison is used when either operand is `float`.<br>The result is always `bool`.
@@ -128,6 +129,7 @@ Precedence is listed from highest to lowest.
 
 | Version | Date (ISO) | Persons | Changes |
 | --- | --- | --- | --- |
+| 1.1 | 2026-09-03 | Viktor Guáth-Nagy | Added `rem` operator<br>corrected `==`, `<>` and `!=` valid with bool
 | 1.0 | 2026-08-23 | Viktor Guáth-Nagy | Initial version
 
 
