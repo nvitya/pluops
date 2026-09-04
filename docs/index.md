@@ -97,7 +97,7 @@ Precedence is listed from highest to lowest.
 | 4 | `<<`, `>>` | Bit shifts |
 | 5 | `&` | Bitwise AND |
 | 6 | <code>&#124;</code>, `xor` | Bitwise OR, bitwise XOR |
-| 7 | `/`, `div`, `mod` | Floating-point division, integer division, integer remainder |
+| 7 | `/`, `div`, `rem`, `mod` | Floating-point division, integer division, integer remainder, integer modulo |
 | 8 | `*` | Multiplication |
 | 9 | `+`, `-` | Addition, subtraction |
 | 10 | `==`, `<>`, `<`, `<=`, `>`, `>=`, `is`, `as` | Comparison, type test, "as" cast |
@@ -129,7 +129,7 @@ Precedence is listed from highest to lowest.
 
 | Version | Date (ISO) | Persons | Changes |
 | --- | --- | --- | --- |
-| 1.2 | 2026-09-04 | Viktor Guáth-Nagy | `==` and `<>` operator rules with `bool` described
+| 1.2 | 2026-09-04 | Viktor Guáth-Nagy | `==` and `<>` operator rules with `bool` described, `rem` added to the operator precedence
 | 1.1 | 2026-09-03 | Viktor Guáth-Nagy | Added `rem` operator<br>corrected `==`, `<>` and `!=` valid with bool
 | 1.0 | 2026-08-23 | Viktor Guáth-Nagy | Initial version
 
