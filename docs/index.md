@@ -63,21 +63,27 @@ Form: `operand1 operator_symbol operand2`
 | `>>` | `int`, `uint` | **Bitwise shift right**: `a >> b`<br>Preserves the signedness of `a`. This operation is invalid for floating-point numbers.<br>For scripting languages, floating-point operands should first be converted to integers using the `Round()` function.
 | `and` | `bool` | **Logical AND**: `a and b`<br>The result is `bool`.
 | `or` | `bool` | **Logical OR**: `a or b`<br>The result is `bool`.
-| `==` | `int`, `uint`, `float`, `bool` | **Equality comparison**: `a == b`<br>`int` comparison is used when each operand is either `int` or `uint`.<br>`float` comparison is used when either operand is `float`.<br>`bool` comparison is used when both operands are `bool`, when only one operand is `bool` then the operation is invalid.<br>The result is always `bool`.
-| `<>` | `int`, `uint`, `float`, `bool` | **Inequality comparison**: `a <> b` (preferred)<br>`int` comparison is used when each operand is either `int` or `uint`.<br>`float` comparison is used when either operand is `float`.<br>`bool` comparison is used when both operands are `bool`, when only one operand is `bool` then the operation is invalid.<br>The result is always `bool`.
-| `!=` | `int`, `uint`, `float`, `bool` | **Inequality comparison**: `a != b` (alternative)<br>`int` comparison is used when each operand is either `int` or `uint`.<br>`float` comparison is used when either operand is `float`.<br>The result is always `bool`.
-| `<` | `int`, `uint`, `float` | **Numerical less-than comparison**: `a < b`<br>`uint` comparison is used for `uint < uint`.<br>`int` comparison is used for `int < uint` or `uint < int`.<br>`float` comparison is used when either operand is `float`.<br>The result is always `bool`.
-| `<=` | `int`, `uint`, `float` | **Numerical less-than-or-equal comparison**: `a <= b`<br>`uint` comparison is used for `uint <= uint`.<br>`int` comparison is used for `int <= uint` or `uint <= int`.<br>`float` comparison is used when either operand is `float`.<br>The result is always `bool`.
-| `>` | `int`, `uint`, `float` | **Numerical greater-than comparison**: `a > b`<br>`uint` comparison is used for `uint > uint`.<br>`int` comparison is used for `int > uint` or `uint > int`.<br>`float` comparison is used when either operand is `float`.<br>The result is always `bool`.
-| `>=` | `int`, `uint`, `float` | **Numerical greater-than-or-equal comparison**: `a >= b`<br>`uint` comparison is used for `uint >= uint`.<br>`int` comparison is used for `int >= uint` or `uint >= int`.<br>`float` comparison is used when either operand is `float`.<br>The result is always `bool`.
+| `==` | `int`, `uint`, `float`, `bool` | **Equality comparison**: `a == b`, non-associative<br>`int` comparison is used when each operand is either `int` or `uint`.<br>`float` comparison is used when either operand is `float`.<br>`bool` comparison is used when both operands are `bool`, when only one operand is `bool` then the operation is invalid.<br>The result is always `bool`.
+| `<>` | `int`, `uint`, `float`, `bool` | **Inequality comparison**: `a <> b` (preferred), non-associative<br>`int` comparison is used when each operand is either `int` or `uint`.<br>`float` comparison is used when either operand is `float`.<br>`bool` comparison is used when both operands are `bool`, when only one operand is `bool` then the operation is invalid.<br>The result is always `bool`.
+| `!=` | `int`, `uint`, `float`, `bool` | **Inequality comparison**: `a != b` (alternative), non-associative<br>`int` comparison is used when each operand is either `int` or `uint`.<br>`float` comparison is used when either operand is `float`.<br>The result is always `bool`.
+| `<` | `int`, `uint`, `float` | **Numerical less-than comparison**: `a < b`, non-associative, with range comparison exception<br>`uint` comparison is used for `uint < uint`.<br>`int` comparison is used for `int < uint` or `uint < int`.<br>`float` comparison is used when either operand is `float`.<br>The result is always `bool`.
+| `<=` | `int`, `uint`, `float` | **Numerical less-than-or-equal comparison**: `a <= b`, non-associative, with range comparison exception<br>`uint` comparison is used for `uint <= uint`.<br>`int` comparison is used for `int <= uint` or `uint <= int`.<br>`float` comparison is used when either operand is `float`.<br>The result is always `bool`.
+| `>` | `int`, `uint`, `float` | **Numerical greater-than comparison**: `a > b`, non-associative, with range comparison exception<br>`uint` comparison is used for `uint > uint`.<br>`int` comparison is used for `int > uint` or `uint > int`.<br>`float` comparison is used when either operand is `float`.<br>The result is always `bool`.
+| `>=` | `int`, `uint`, `float` | **Numerical greater-than-or-equal comparison**: `a >= b`, non-associative, with range comparison exception<br>`uint` comparison is used for `uint >= uint`.<br>`int` comparison is used for `int >= uint` or `uint >= int`.<br>`float` comparison is used when either operand is `float`.<br>The result is always `bool`.
 | `.` | structured types | **Structured type member access**: `a.member_name`.
 | `is` | any expression + Type | **Type test**: `a is T`<br>The result is `bool`: `true` if the type of `a` is `T` or a descendant of `T`.
 | `as` | any expression + Type | **Type casting**: `a as T`<br>The result is `a` converted to type `T`.<br>**The conversion might be invalid.**<br>Some languages might provide alternative forms, such as `T(a)`.
 | `[`+`]`<br>(postfix) | `a`: array or `ptr`<br>`b`: `int`, `uint` | **Pointer or array indexing**: `a[b]`<br>**On arrays:** The array element at index `b` in array `a` is returned.<br>**On pointers:** When `a = ^T`, the result type is also `^T` and points to the address `a + b * SizeOf(T)` (without dereferencing, unlike in C).
 
-## Range Comparisons
+### Associativity
+Unless stated otherwise, binary operators are **left-associative**. Repeated uses of the same `op` operator are therefore grouped from left to right:
+```
+a op b op c op d  ->  ((a op b) op c) op d
+```
 
-It is recommended to support range comparisons expressions in the following forms:
+#### Range Comparisons
+
+It is recommended to support the following three-operand chained comparisons:
 ```
 x < y < z
 x <= y < z
@@ -89,7 +95,9 @@ x >= y > z
 x > y >= z
 x >= y >= z
 ```
-The compiler sould translate these expressions the way that the middle value evaluated only once.
+A chained comparison `x op1 y op2 z` is equivalent to `(x op1 y) and (y op2 z)`, except that `y` is evaluated only once.
+
+Longer chains such as `w < x < y < z` and direction changes such as `x < y > z` should be reported as invalid expressions.
 
 ## Parentheses
 
@@ -145,7 +153,7 @@ Precedence is listed from highest to lowest.
 
 | Version | Date (ISO) | Persons | Changes |
 | --- | --- | --- | --- |
-| 1.3 | 2026-09-18 | Viktor Guáth-Nagy | `x < y < z` range comparions added, `,` corrected for list separator
+| 1.3 | 2026-09-18 | Viktor Guáth-Nagy | Added associativity information, `x < y < z` range comparions, `,` corrected for list separator
 | 1.2 | 2026-09-04 | Viktor Guáth-Nagy | `==` and `<>` operator rules with `bool` described, `rem` added to the operator precedence
 | 1.1 | 2026-09-03 | Viktor Guáth-Nagy | Added `rem` operator<br>corrected `==`, `<>` and `!=` valid with bool
 | 1.0 | 2026-08-23 | Viktor Guáth-Nagy | Initial version
