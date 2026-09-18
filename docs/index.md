@@ -2,7 +2,7 @@
 
 Publicly available, open specification for designing progamming languages.
 
-Version: 1.2 (2026-09-04)
+Version: 1.3 (2026-09-18)
 Specification page: [https://nvitya.github.io/pluops/](https://nvitya.github.io/pluops/)
 
 ## Value Types
@@ -75,6 +75,22 @@ Form: `operand1 operator_symbol operand2`
 | `as` | any expression + Type | **Type casting**: `a as T`<br>The result is `a` converted to type `T`.<br>**The conversion might be invalid.**<br>Some languages might provide alternative forms, such as `T(a)`.
 | `[`+`]`<br>(postfix) | `a`: array or `ptr`<br>`b`: `int`, `uint` | **Pointer or array indexing**: `a[b]`<br>**On arrays:** The array element at index `b` in array `a` is returned.<br>**On pointers:** When `a = ^T`, the result type is also `^T` and points to the address `a + b * SizeOf(T)` (without dereferencing, unlike in C).
 
+## Range Comparisons
+
+It is recommended to support range comparisons expressions in the following forms:
+```
+x < y < z
+x <= y < z
+x < y <= z
+x <= y <= z
+
+x > y > z
+x >= y > z
+x > y >= z
+x >= y >= z
+```
+The compiler sould translate these expressions the way that the middle value evaluated only once.
+
 ## Parentheses
 
 Form: `( expression )`
@@ -114,13 +130,13 @@ Precedence is listed from highest to lowest.
 | `'` | String delimiter
 | `"` | String delimiter
 | `:` | Block start, type designation marker, member name designation marker
-| `;` | list separator
+| `,` | list separator
 | `;` | Statement termination
 | `\` | Escape symbol in strings, line continuation
-| `?` | DQ: inference marker
-| `#` | DO: preprocessor directive
-| `$` | DQ: context-dependent symbols
-| `@` | DQ: namespace designator
+| `?` | (in DQ: inference marker)
+| `#` | (in DO: preprocessor directive)
+| `$` | (in DQ: context-dependent symbols)
+| `@` | (in DQ: namespace designator)
 | `` ` `` | Recommended for infix operators, such as `` `cxdiv` ``
 | `!` | - |
 
@@ -129,6 +145,7 @@ Precedence is listed from highest to lowest.
 
 | Version | Date (ISO) | Persons | Changes |
 | --- | --- | --- | --- |
+| 1.3 | 2026-09-18 | Viktor Guáth-Nagy | `x < y < z` range comparions added, `,` corrected for list separator
 | 1.2 | 2026-09-04 | Viktor Guáth-Nagy | `==` and `<>` operator rules with `bool` described, `rem` added to the operator precedence
 | 1.1 | 2026-09-03 | Viktor Guáth-Nagy | Added `rem` operator<br>corrected `==`, `<>` and `!=` valid with bool
 | 1.0 | 2026-08-23 | Viktor Guáth-Nagy | Initial version
