@@ -2,7 +2,7 @@
 
 Publicly available, open specification for designing progamming languages.
 
-Version: 1.3 (2026-09-18)
+Version: 1.4 (2026-10-25)
 Specification page: [https://nvitya.github.io/pluops/](https://nvitya.github.io/pluops/)
 
 ## Value Types
@@ -59,6 +59,7 @@ Form: `operand1 operator_symbol operand2`
 | `mod` | `int`, `uint` | **Integer modulo**: `a mod b`<br>`r = a - (a div b) * b`<br>`if r < 0 then r = r + b`<br>Cannot be negative.<br>The result is `uint` for `uint mod uint`.<br>The result is `int` for `int mod uint` or `uint mod int`.
 | `&` | `int`, `uint` | **Bitwise AND**: `a & b`<br>Preserves integer signedness.<br>For scripting languages, floating-point operands should first be converted to integers using the `Round()` function (to handle 0.999 as 1).
 | <code>&#124;</code> | `int`, `uint` | **Bitwise OR**: <code>a &#124; b</code><br>Preserves integer signedness. This operation is invalid for floating-point numbers.<br>For scripting languages, floating-point operands should first be converted to integers using the `Round()` function.
+| `xor` | `int`, `uint` | **Bitwise XOR**: `a xor b`<br>Preserves integer signedness.<br>For scripting languages, floating-point operands should first be converted to integers using the `Round()` function (to handle 0.999 as 1).
 | `<<` | `int`, `uint` | **Bitwise shift left**: `a << b`<br>Preserves the signedness of `a`. This operation is invalid for floating-point numbers.<br>For scripting languages, floating-point operands should first be converted to integers using the `Round()` function.
 | `>>` | `int`, `uint` | **Bitwise shift right**: `a >> b`<br>Preserves the signedness of `a`. This operation is invalid for floating-point numbers.<br>For scripting languages, floating-point operands should first be converted to integers using the `Round()` function.
 | `and` | `bool` | **Logical AND**: `a and b`<br>The result is `bool`.
@@ -153,6 +154,7 @@ Precedence is listed from highest to lowest.
 
 | Version | Date (ISO) | Persons | Changes |
 | --- | --- | --- | --- |
+| 1.4 | 2026-10-25 | Viktor Guáth-Nagy | Added the missing `xor` to the binary operator table
 | 1.3 | 2026-09-18 | Viktor Guáth-Nagy | Added associativity information, `x < y < z` range comparions, `,` corrected for list separator
 | 1.2 | 2026-09-04 | Viktor Guáth-Nagy | `==` and `<>` operator rules with `bool` described, `rem` added to the operator precedence
 | 1.1 | 2026-09-03 | Viktor Guáth-Nagy | Added `rem` operator<br>corrected `==`, `<>` and `!=` valid with bool
